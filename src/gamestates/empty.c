@@ -36,14 +36,9 @@ void Gamestate_Draw(struct Game *game, struct EmptyResources* data) {
 	// Called as soon as possible, but no sooner than next Gamestate_Logic call.
 	// Draw everything to the screen here.
 	if (data->blink_counter < 50) {
-		al_draw_text(data->font, al_map_rgb(255,255,255), game->viewport.width / 2, game->viewport.height / 2, ALLEGRO_ALIGN_CENTRE, "Nothing to see here, move along!");
+		al_draw_text(data->font, al_map_rgb(255,255,255), game->viewport.width / 2, game->viewport.height / 2,
+		             ALLEGRO_ALIGN_CENTRE, "Nothing to see here, move along!");
 	}
-}
-
-void Gamestate_Start(struct Game *game, struct EmptyResources* data) {
-	// Called when this gamestate gets control. Good place for initializing state,
-	// playing music etc.
-	data->blink_counter = 0;
 }
 
 void Gamestate_ProcessEvent(struct Game *game, struct EmptyResources* data, ALLEGRO_EVENT *ev) {
@@ -64,15 +59,21 @@ void* Gamestate_Load(struct Game *game, void (*progress)(struct Game*)) {
 	return data;
 }
 
-void Gamestate_Stop(struct Game *game, struct EmptyResources* data) {
-	// Called when gamestate gets stopped. Stop timers, music etc. here.
-}
-
 void Gamestate_Unload(struct Game *game, struct EmptyResources* data) {
 	// Called when the gamestate library is being unloaded.
 	// Good place for freeing all allocated memory and resources.
 	al_destroy_font(data->font);
 	free(data);
+}
+
+void Gamestate_Start(struct Game *game, struct EmptyResources* data) {
+	// Called when this gamestate gets control. Good place for initializing state,
+	// playing music etc.
+	data->blink_counter = 0;
+}
+
+void Gamestate_Stop(struct Game *game, struct EmptyResources* data) {
+	// Called when gamestate gets stopped. Stop timers, music etc. here.
 }
 
 // Ignore those for now.
