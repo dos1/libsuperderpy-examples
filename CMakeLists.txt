@@ -4,7 +4,6 @@ project(libsuperderpy-examples C)
 
 SET(LIBSUPERDERPY_GAMENAME "superexamples")
 SET(LIBSUPERDERPY_GAMENAME_PRETTY "Super Examples")
-SET(LIBSUPERDERPY_INITIAL_GAMESTATE "dosowisko")
 
 include("libsuperderpy/cmake/include.cmake")
 include("libsuperderpy/cmake/SetPaths.cmake")

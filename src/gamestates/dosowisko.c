@@ -27,7 +27,7 @@
 
 int Gamestate_ProgressCount = 5;
 
-static char* text = "# dosowisko.net";
+static const char* text = "# dosowisko.net";
 
 //==================================Timeline manager actions BEGIN
 bool FadeIn(struct Game *game, struct TM_Action *action, enum TM_ActionState state) {
