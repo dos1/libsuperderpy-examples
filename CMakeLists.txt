@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(libsuperderpy-examples C)
 
-SET(LIBSUPERDERPY_GAMENAME "superexamples")
-SET(LIBSUPERDERPY_GAMENAME_PRETTY "Super Examples")
+SET(LIBSUPERDERPY_GAMENAME "superexamples" CACHE INTERNAL "")
+SET(LIBSUPERDERPY_GAMENAME_PRETTY "Super Examples" CACHE INTERNAL "")
 
 include("libsuperderpy/cmake/include.cmake")
 include("libsuperderpy/cmake/SetPaths.cmake")
