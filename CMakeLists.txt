@@ -5,8 +5,10 @@ project(libsuperderpy-examples C)
 SET(LIBSUPERDERPY_GAMENAME "superexamples" CACHE INTERNAL "")
 SET(LIBSUPERDERPY_GAMENAME_PRETTY "Super Examples" CACHE INTERNAL "")
 
-include("libsuperderpy/cmake/include.cmake")
-include("libsuperderpy/cmake/SetPaths.cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_SOURCE_DIR}/libsuperderpy/cmake")
+
+include(libsuperderpy)
+include(SetPaths)
 
 add_subdirectory(libsuperderpy)
 add_subdirectory(src)
