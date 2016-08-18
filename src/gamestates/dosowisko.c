@@ -19,6 +19,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "../common.h"
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
@@ -31,7 +32,7 @@ static const char* text = "# dosowisko.net";
 
 //==================================Timeline manager actions BEGIN
 bool FadeIn(struct Game *game, struct TM_Action *action, enum TM_ActionState state) {
-	struct dosowiskoResources *data = action->arguments->value;
+	struct dosowiskoResources *data = TM_GetArg(action->arguments, 0);
 	if (state == TM_ACTIONSTATE_START) {
 		data->fade=0;
 	}
@@ -47,7 +48,7 @@ bool FadeIn(struct Game *game, struct TM_Action *action, enum TM_ActionState sta
 }
 
 bool FadeOut(struct Game *game, struct TM_Action *action, enum TM_ActionState state) {
-	struct dosowiskoResources *data = action->arguments->value;
+	struct dosowiskoResources *data = TM_GetArg(action->arguments, 0);
 	if (state == TM_ACTIONSTATE_START) {
 		data->fadeout = true;
 	}
@@ -55,18 +56,20 @@ bool FadeOut(struct Game *game, struct TM_Action *action, enum TM_ActionState st
 }
 
 bool End(struct Game *game, struct TM_Action *action, enum TM_ActionState state) {
-	if (state == TM_ACTIONSTATE_RUNNING) SwitchGamestate(game, "dosowisko", "empty");
+	if (state == TM_ACTIONSTATE_RUNNING) {
+		SwitchCurrentGamestate(game, "empty");
+	}
 	return true;
 }
 
 bool Play(struct Game *game, struct TM_Action *action, enum TM_ActionState state) {
-	ALLEGRO_SAMPLE_INSTANCE *data = action->arguments->value;
+	ALLEGRO_SAMPLE_INSTANCE *data = TM_GetArg(action->arguments, 0);
 	if (state == TM_ACTIONSTATE_RUNNING) al_play_sample_instance(data);
 	return true;
 }
 
 bool Type(struct Game *game, struct TM_Action *action, enum TM_ActionState state) {
-	struct dosowiskoResources *data = action->arguments->value;
+	struct dosowiskoResources *data = TM_GetArg(action->arguments, 0);
 	if (state == TM_ACTIONSTATE_RUNNING) {
 		strncpy(data->text, text, data->pos++);
 		data->text[data->pos] = 0;
@@ -158,7 +161,7 @@ void Gamestate_Start(struct Game *game, struct dosowiskoResources* data) {
 void Gamestate_ProcessEvent(struct Game *game, struct dosowiskoResources* data, ALLEGRO_EVENT *ev) {
 	TM_HandleEvent(data->timeline, ev);
 	if ((ev->type==ALLEGRO_EVENT_KEY_DOWN) && (ev->keyboard.keycode == ALLEGRO_KEY_ESCAPE)) {
-		SwitchGamestate(game, "dosowisko", "empty");
+		SwitchCurrentGamestate(game, "empty");
 	}
 }
 
