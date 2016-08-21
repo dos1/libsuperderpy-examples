@@ -20,11 +20,17 @@
  */
 
 #include <libsuperderpy.h>
-#include "empty.h"
+
+struct GamestateResources {
+		// This struct is for every resource allocated and used by your gamestate.
+		// It gets created on load and then gets passed around to all other function calls.
+		ALLEGRO_FONT *font;
+		int blink_counter;
+};
 
 int Gamestate_ProgressCount = 1; // number of loading steps as reported by Gamestate_Load
 
-void Gamestate_Logic(struct Game *game, struct EmptyResources* data) {
+void Gamestate_Logic(struct Game *game, struct GamestateResources* data) {
 	// Called 60 times per second. Here you should do all your game logic.
 	data->blink_counter++;
 	if (data->blink_counter >= 60) {
@@ -32,7 +38,7 @@ void Gamestate_Logic(struct Game *game, struct EmptyResources* data) {
 	}
 }
 
-void Gamestate_Draw(struct Game *game, struct EmptyResources* data) {
+void Gamestate_Draw(struct Game *game, struct GamestateResources* data) {
 	// Called as soon as possible, but no sooner than next Gamestate_Logic call.
 	// Draw everything to the screen here.
 	if (data->blink_counter < 50) {
@@ -41,7 +47,7 @@ void Gamestate_Draw(struct Game *game, struct EmptyResources* data) {
 	}
 }
 
-void Gamestate_ProcessEvent(struct Game *game, struct EmptyResources* data, ALLEGRO_EVENT *ev) {
+void Gamestate_ProcessEvent(struct Game *game, struct GamestateResources* data, ALLEGRO_EVENT *ev) {
 	// Called for each event in Allegro event queue.
 	// Here you can handle user input, expiring timers etc.
 	if ((ev->type==ALLEGRO_EVENT_KEY_DOWN) && (ev->keyboard.keycode == ALLEGRO_KEY_ESCAPE)) {
@@ -53,31 +59,31 @@ void Gamestate_ProcessEvent(struct Game *game, struct EmptyResources* data, ALLE
 void* Gamestate_Load(struct Game *game, void (*progress)(struct Game*)) {
 	// Called once, when the gamestate library is being loaded.
 	// Good place for allocating memory, loading bitmaps etc.
-	struct EmptyResources *data = malloc(sizeof(struct EmptyResources));
+	struct GamestateResources *data = malloc(sizeof(struct GamestateResources));
 	data->font = al_create_builtin_font();
 	progress(game); // report that we progressed with the loading, so the engine can draw a progress bar
 	return data;
 }
 
-void Gamestate_Unload(struct Game *game, struct EmptyResources* data) {
+void Gamestate_Unload(struct Game *game, struct GamestateResources* data) {
 	// Called when the gamestate library is being unloaded.
 	// Good place for freeing all allocated memory and resources.
 	al_destroy_font(data->font);
 	free(data);
 }
 
-void Gamestate_Start(struct Game *game, struct EmptyResources* data) {
+void Gamestate_Start(struct Game *game, struct GamestateResources* data) {
 	// Called when this gamestate gets control. Good place for initializing state,
 	// playing music etc.
 	data->blink_counter = 0;
 }
 
-void Gamestate_Stop(struct Game *game, struct EmptyResources* data) {
+void Gamestate_Stop(struct Game *game, struct GamestateResources* data) {
 	// Called when gamestate gets stopped. Stop timers, music etc. here.
 }
 
 // Ignore those for now.
 // TODO: Check, comment, refine and/or remove:
-void Gamestate_Reload(struct Game *game, struct EmptyResources* data) {}
-void Gamestate_Pause(struct Game *game, struct EmptyResources* data) {}
-void Gamestate_Resume(struct Game *game, struct EmptyResources* data) {}
+void Gamestate_Reload(struct Game *game, struct GamestateResources* data) {}
+void Gamestate_Pause(struct Game *game, struct GamestateResources* data) {}
+void Gamestate_Resume(struct Game *game, struct GamestateResources* data) {}
