@@ -20,8 +20,6 @@
  */
 
 #include "../common.h"
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_primitives.h>
 #include <math.h>
 #include <libsuperderpy.h>
 
