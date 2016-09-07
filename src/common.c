@@ -23,10 +23,11 @@
 #include <libsuperderpy.h>
 
 struct CommonResources* CreateGameData(struct Game *game) {
-	return calloc(1, sizeof(struct CommonResources));
+	struct CommonResources *data = calloc(1, sizeof(struct CommonResources));
+	return data;
 }
 
-void DestroyGameData(struct Game *game, struct CommonResources *resources) {
-	free(resources);
+void DestroyGameData(struct Game *game, struct CommonResources *data) {
+	free(data);
 }
 

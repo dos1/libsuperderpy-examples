@@ -52,7 +52,7 @@ void Gamestate_ProcessEvent(struct Game *game, struct GamestateResources* data, 
 	// Called for each event in Allegro event queue.
 	// Here you can handle user input, expiring timers etc.
 	if ((ev->type==ALLEGRO_EVENT_KEY_DOWN) && (ev->keyboard.keycode == ALLEGRO_KEY_ESCAPE)) {
-		UnloadGamestate(game, "empty"); // mark this gamestate to be stopped and unloaded
+		UnloadCurrentGamestate(game); // mark this gamestate to be stopped and unloaded
 		// When there are no active gamestates, the engine will quit.
 	}
 }
