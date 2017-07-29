@@ -24,3 +24,4 @@ struct CommonResources {
 
 struct CommonResources* CreateGameData(struct Game *game);
 void DestroyGameData(struct Game *game, struct CommonResources *data);
+bool GlobalEventHandler(struct Game *game, ALLEGRO_EVENT *ev);
