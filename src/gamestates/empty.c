@@ -59,7 +59,7 @@ void Gamestate_ProcessEvent(struct Game *game, struct GamestateResources* data, 
 void* Gamestate_Load(struct Game *game, void (*progress)(struct Game*)) {
 	// Called once, when the gamestate library is being loaded.
 	// Good place for allocating memory, loading bitmaps etc.
-	struct GamestateResources *data = malloc(sizeof(struct GamestateResources));
+	struct GamestateResources *data = calloc(1, sizeof(struct GamestateResources));
 	data->font = al_create_builtin_font();
 	progress(game); // report that we progressed with the loading, so the engine can draw a progress bar
 	return data;
