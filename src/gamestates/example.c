@@ -24,19 +24,27 @@
 struct GamestateResources {
 	// This struct is for every resource allocated and used by your gamestate.
 	// It gets created on load and then gets passed around to all other function calls.
-
-	bool unused; // just so the struct is not 0 size, remove me when adding something
+	ALLEGRO_FONT* font;
+	int blink_counter;
 };
 
 int Gamestate_ProgressCount = 1; // number of loading steps as reported by Gamestate_Load
 
 void Gamestate_Logic(struct Game* game, struct GamestateResources* data) {
 	// Called 60 times per second (by default). Here you should do all your game logic.
+	data->blink_counter++;
+	if (data->blink_counter >= 60) {
+		data->blink_counter = 0;
+	}
 }
 
 void Gamestate_Draw(struct Game* game, struct GamestateResources* data) {
 	// Called as soon as possible, but no sooner than next Gamestate_Logic call.
 	// Draw everything to the screen here.
+	if (data->blink_counter < 50) {
+		al_draw_text(data->font, al_map_rgb(255, 255, 255), game->viewport.width / 2, game->viewport.height / 2,
+		  ALLEGRO_ALIGN_CENTRE, "Nothing to see here, move along!");
+	}
 }
 
 void Gamestate_ProcessEvent(struct Game* game, struct GamestateResources* data, ALLEGRO_EVENT* ev) {
@@ -57,6 +65,8 @@ void* Gamestate_Load(struct Game* game, void (*progress)(struct Game*)) {
 	// require main OpenGL context.
 
 	struct GamestateResources* data = calloc(1, sizeof(struct GamestateResources));
+	al_set_new_bitmap_flags(al_get_new_bitmap_flags() ^ ALLEGRO_MAG_LINEAR); // disable linear scaling for pixelarty appearance
+	data->font = al_create_builtin_font();
 	progress(game); // report that we progressed with the loading, so the engine can move a progress bar
 	return data;
 }
@@ -64,12 +74,14 @@ void* Gamestate_Load(struct Game* game, void (*progress)(struct Game*)) {
 void Gamestate_Unload(struct Game* game, struct GamestateResources* data) {
 	// Called when the gamestate library is being unloaded.
 	// Good place for freeing all allocated memory and resources.
+	al_destroy_font(data->font);
 	free(data);
 }
 
 void Gamestate_Start(struct Game* game, struct GamestateResources* data) {
 	// Called when this gamestate gets control. Good place for initializing state,
 	// playing music etc.
+	data->blink_counter = 0;
 }
 
 void Gamestate_Stop(struct Game* game, struct GamestateResources* data) {

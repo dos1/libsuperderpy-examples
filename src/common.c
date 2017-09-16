@@ -21,8 +21,8 @@
 #include "common.h"
 #include <libsuperderpy.h>
 
-bool GlobalEventHandler(struct Game *game, ALLEGRO_EVENT *ev) {
-	if ((ev->type==ALLEGRO_EVENT_KEY_DOWN) && (ev->keyboard.keycode == ALLEGRO_KEY_F)) {
+bool GlobalEventHandler(struct Game* game, ALLEGRO_EVENT* ev) {
+	if ((ev->type == ALLEGRO_EVENT_KEY_DOWN) && (ev->keyboard.keycode == ALLEGRO_KEY_F)) {
 		game->config.fullscreen = !game->config.fullscreen;
 		if (game->config.fullscreen) {
 			SetConfigOption(game, "SuperDerpy", "fullscreen", "1");
@@ -39,12 +39,11 @@ bool GlobalEventHandler(struct Game *game, ALLEGRO_EVENT *ev) {
 	return false;
 }
 
-struct CommonResources* CreateGameData(struct Game *game) {
-	struct CommonResources *data = calloc(1, sizeof(struct CommonResources));
+struct CommonResources* CreateGameData(struct Game* game) {
+	struct CommonResources* data = calloc(1, sizeof(struct CommonResources));
 	return data;
 }
 
-void DestroyGameData(struct Game *game) {
+void DestroyGameData(struct Game* game) {
 	free(game->data);
 }
-
