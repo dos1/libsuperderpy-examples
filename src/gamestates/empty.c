@@ -28,14 +28,13 @@ struct GamestateResources {
 	bool unused; // just so the struct is not 0 size, remove me when adding something
 };
 
-int Gamestate_ProgressCount = 1; // number of loading steps as reported by Gamestate_Load
+int Gamestate_ProgressCount = 1; // number of loading steps as reported by Gamestate_Load; 0 when missing
 
-void Gamestate_Logic(struct Game* game, struct GamestateResources* data) {
-	// Called 60 times per second (by default). Here you should do all your game logic.
+void Gamestate_Logic(struct Game* game, struct GamestateResources* data, double delta) {
+	// Here you should do all your game logic as if <delta> seconds have passed.
 }
 
 void Gamestate_Draw(struct Game* game, struct GamestateResources* data) {
-	// Called as soon as possible, but no sooner than next Gamestate_Logic call.
 	// Draw everything to the screen here.
 }
 
@@ -52,9 +51,8 @@ void* Gamestate_Load(struct Game* game, void (*progress)(struct Game*)) {
 	// Called once, when the gamestate library is being loaded.
 	// Good place for allocating memory, loading bitmaps etc.
 	//
-	// NOTE: Depending on engine configuration, this may be called from a separate thread.
-	// Unless you're sure what you're doing, avoid using drawing calls and other things that
-	// require main OpenGL context.
+	// NOTE: There's no OpenGL context available here. If you want to prerender something,
+	// create VBOs, etc. do it in Gamestate_PostLoad.
 
 	struct GamestateResources* data = calloc(1, sizeof(struct GamestateResources));
 	progress(game); // report that we progressed with the loading, so the engine can move a progress bar
@@ -74,6 +72,13 @@ void Gamestate_Start(struct Game* game, struct GamestateResources* data) {
 
 void Gamestate_Stop(struct Game* game, struct GamestateResources* data) {
 	// Called when gamestate gets stopped. Stop timers, music etc. here.
+}
+
+// Optional endpoints:
+
+void Gamestate_PostLoad(struct Game* game, struct GamestateResources* data) {
+	// This is called in the main thread after Gamestate_Load has ended.
+	// Use it to prerender bitmaps, create VBOs, etc.
 }
 
 void Gamestate_Pause(struct Game* game, struct GamestateResources* data) {

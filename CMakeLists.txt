@@ -6,11 +6,14 @@ SET(LIBSUPERDERPY_GAMENAME "superexamples" CACHE INTERNAL "")
 SET(LIBSUPERDERPY_GAMENAME_PRETTY "Super Examples" CACHE INTERNAL "")
 SET(LIBSUPERDERPY_ORIENTATION "LANDSCAPE" CACHE INTERNAL "")
 SET(LIBSUPERDERPY_VERSION "1.0" CACHE INTERNAL "")
+#add_definitions(-DLIBSUPERDERPY_SINGLE_THREAD=1)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_SOURCE_DIR}/libsuperderpy/cmake")
 
 include(libsuperderpy)
 include(SetPaths)
+
+set(EMSCRIPTEN_TOTAL_MEMORY "32")
 
 add_subdirectory(libsuperderpy)
 add_subdirectory(src)
