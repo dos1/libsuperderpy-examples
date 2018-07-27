@@ -47,8 +47,8 @@ int main(int argc, char** argv) {
 
 	game->data = CreateGameData(game);
 
-	game->handlers.event = &GlobalEventHandler;
-	game->handlers.destroy = &DestroyGameData;
+	game->handlers.event = GlobalEventHandler;
+	game->handlers.destroy = DestroyGameData;
 
 	return libsuperderpy_run(game);
 }
