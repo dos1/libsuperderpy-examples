@@ -41,6 +41,7 @@ void Gamestate_Logic(struct Game* game, struct GamestateResources* data, double 
 void Gamestate_Draw(struct Game* game, struct GamestateResources* data) {
 	// Called as soon as possible, but no sooner than next Gamestate_Logic call.
 	// Draw everything to the screen here.
+        al_clear_to_color(al_map_rgb(12, 34, 56));
 	if (data->blink_counter < 50) {
 		al_draw_text(data->font, al_map_rgb(255, 255, 255), game->viewport.width / 2.0, game->viewport.height / 2.0,
 			ALLEGRO_ALIGN_CENTRE, "Nothing to see here, move along!");
