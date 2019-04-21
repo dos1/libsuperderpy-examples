@@ -51,7 +51,7 @@ void* Gamestate_Load(struct Game* game, void (*progress)(struct Game*)) {
 	// Called once, when the gamestate library is being loaded.
 	// Good place for allocating memory, loading bitmaps etc.
 	//
-	// NOTE: There's no OpenGL context available here. If you want to prerender something,
+	// Keep in mind that there's no OpenGL context available here. If you want to prerender something,
 	// create VBOs, etc. do it in Gamestate_PostLoad.
 
 	struct GamestateResources* data = calloc(1, sizeof(struct GamestateResources));
