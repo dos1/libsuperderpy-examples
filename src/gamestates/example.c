@@ -51,9 +51,11 @@ void Gamestate_ProcessEvent(struct Game* game, struct GamestateResources* data, 
 
 void* Gamestate_Load(struct Game* game, void (*progress)(struct Game*)) {
 	struct GamestateResources* data = calloc(1, sizeof(struct GamestateResources));
-	al_set_new_bitmap_flags(al_get_new_bitmap_flags() ^ ALLEGRO_MAG_LINEAR); // disable linear scaling for pixelarty appearance
+	int flags = al_get_new_bitmap_flags();
+	al_set_new_bitmap_flags(flags & ~ALLEGRO_MAG_LINEAR); // disable linear scaling for pixelarty appearance
 	data->font = al_create_builtin_font();
 	progress(game); // report that we progressed with the loading, so the engine can move a progress bar
+	al_set_new_bitmap_flags(flags);
 	return data;
 }
 
