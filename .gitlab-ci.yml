@@ -118,6 +118,18 @@ build:pocketchip:
     - cd utils
     - ./package_pocketchip.sh
 
+build:raspberrypi:
+  extends: .build
+  script:
+    - cd utils
+    - ./package_raspberrypi.sh
+
+build:switch:
+  extends: .build
+  script:
+    - cd utils
+    - ./package_switch.sh
+
 build:maemo5:
   extends: .build
   script:
@@ -287,6 +299,26 @@ deploy:pocketchip:
   variables:
     DEPLOY_FILENAME: $PROJECT_NAME-pocketchip.zip
     DEPLOY_TARGET: ci-pocketchip
+
+deploy:raspberrypi:
+  extends: .butler-deploy
+  environment:
+    name: itch-raspberrypi
+  dependencies:
+    - build:raspberrypi
+  variables:
+    DEPLOY_FILENAME: $PROJECT_NAME-raspberrypi.zip
+    DEPLOY_TARGET: ci-raspberrypi
+
+deploy:switch:
+  extends: .butler-deploy
+  environment:
+    name: itch-switch
+  dependencies:
+    - build:switch
+  variables:
+    DEPLOY_FILENAME: $PROJECT_NAME-switch.zip
+    DEPLOY_TARGET: ci-switch
 
 deploy:maemo5:
   extends: .butler-deploy
