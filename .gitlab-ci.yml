@@ -23,6 +23,9 @@ stages:
     paths:
       - .assetcache/
       - .flatpak-builder/
+  variables:
+    LIBSUPERDERPY_ANDROID_KEYSTORE_BASE64: $ANDROID_KEYSTORE_BASE64
+    LIBSUPERDERPY_ANDROID_KEYSTORE_PASSWORD: $ANDROID_KEYSTORE_PASSWORD
   before_script:
     - ln -s /usr/local/bin/docker /usr/local/bin/podman
     - echo -e '#!/bin/sh\n$@' > /usr/local/bin/sudo
