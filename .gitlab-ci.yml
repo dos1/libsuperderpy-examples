@@ -109,6 +109,12 @@ build:android-armv7:
     - cd utils
     - ./package_android_armv7.sh git
 
+build:android-arm64:
+  extends: .build
+  script:
+    - cd utils
+    - ./package_android_arm64.sh git
+
 build:steamlink:
   extends: .build
   script:
@@ -282,6 +288,16 @@ deploy:android-armv7:
   variables:
     DEPLOY_FILENAME: $PROJECT_NAME-android-armv7.apk
     DEPLOY_TARGET: ci-android-armv7
+
+deploy:android-arm64:
+  extends: .butler-deploy
+  environment:
+    name: itch-android-arm64
+  dependencies:
+    - build:android-arm64
+  variables:
+    DEPLOY_FILENAME: $PROJECT_NAME-android-arm64.apk
+    DEPLOY_TARGET: ci-android-arm64
 
 deploy:steamlink:
   extends: .butler-deploy
