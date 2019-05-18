@@ -23,10 +23,6 @@ stages:
     LIBSUPERDERPY_ANDROID_KEYSTORE_BASE64: $ANDROID_KEYSTORE_BASE64
     LIBSUPERDERPY_ANDROID_KEYSTORE_PASSWORD: $ANDROID_KEYSTORE_PASSWORD
     GIT_SUBMODULE_STRATEGY: recursive
-  before_script:
-    - ln -s /usr/local/bin/docker /usr/local/bin/podman
-    - echo -e '#!/bin/sh\n$@' > /usr/local/bin/sudo
-    - chmod +x /usr/local/bin/sudo
 
 build:win64:
   extends: .build
