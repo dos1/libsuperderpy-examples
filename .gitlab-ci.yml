@@ -3,6 +3,9 @@ stages:
   - deploy
   - notify
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 .build:
   image: docker
   stage: build
@@ -22,7 +25,6 @@ stages:
   variables:
     LIBSUPERDERPY_ANDROID_KEYSTORE_BASE64: $ANDROID_KEYSTORE_BASE64
     LIBSUPERDERPY_ANDROID_KEYSTORE_PASSWORD: $ANDROID_KEYSTORE_PASSWORD
-    GIT_SUBMODULE_STRATEGY: recursive
 
 build:win64:
   extends: .build
@@ -156,7 +158,7 @@ build:maemo5:
   script:
     - butler push utils/output/$DEPLOY_FILENAME $BUTLER_TARGET:$DEPLOY_TARGET --userversion `echo $CI_COMMIT_SHA | cut -c1-7`
 
-deploy:linux-i686:
+deploy:itch:linux-i686:
   extends: .butler-deploy
   environment:
     name: itch-linux-steamrt-i686
@@ -166,7 +168,7 @@ deploy:linux-i686:
     DEPLOY_FILENAME: $PROJECT_NAME-linux-i686.tar.gz
     DEPLOY_TARGET: ci-linux-steamrt-i686
 
-deploy:linux-amd64:
+deploy:itch:linux-amd64:
   extends: .butler-deploy
   environment:
     name: itch-linux-steamrt-amd64
@@ -176,7 +178,7 @@ deploy:linux-amd64:
     DEPLOY_FILENAME: $PROJECT_NAME-linux-amd64.tar.gz
     DEPLOY_TARGET: ci-linux-steamrt-amd64
 
-deploy:linux-flatpak-amd64:
+deploy:itch:linux-flatpak-amd64:
   extends: .butler-deploy
   environment:
     name: itch-linux-flatpak-amd64
@@ -186,7 +188,7 @@ deploy:linux-flatpak-amd64:
     DEPLOY_FILENAME: $PROJECT_NAME-linux-amd64.flatpak
     DEPLOY_TARGET: ci-linux-flatpak-amd64
 
-deploy:linux-flatpak-arm64:
+deploy:itch:linux-flatpak-arm64:
   extends: .butler-deploy
   environment:
     name: itch-linux-flatpak-arm64
@@ -196,7 +198,7 @@ deploy:linux-flatpak-arm64:
     DEPLOY_FILENAME: $PROJECT_NAME-linux-arm64.flatpak
     DEPLOY_TARGET: ci-linux-flatpak-arm64
 
-deploy:linux-flatpak-armv7:
+deploy:itch:linux-flatpak-armv7:
   extends: .butler-deploy
   only:
     variables:
@@ -209,7 +211,7 @@ deploy:linux-flatpak-armv7:
     DEPLOY_FILENAME: $PROJECT_NAME-linux-armv7.flatpak
     DEPLOY_TARGET: ci-linux-flatpak-armv7
 
-deploy:linux-flatpak-i686:
+deploy:itch:linux-flatpak-i686:
   extends: .butler-deploy
   only:
     variables:
@@ -222,7 +224,7 @@ deploy:linux-flatpak-i686:
     DEPLOY_FILENAME: $PROJECT_NAME-linux-i686.flatpak
     DEPLOY_TARGET: ci-linux-flatpak-i686
 
-deploy:win32:
+deploy:itch:win32:
   extends: .butler-deploy
   environment:
     name: itch-win32
@@ -232,7 +234,7 @@ deploy:win32:
     DEPLOY_FILENAME: $PROJECT_NAME-win32.zip
     DEPLOY_TARGET: ci-win32
 
-deploy:win64:
+deploy:itch:win64:
   extends: .butler-deploy
   environment:
     name: itch-win64
@@ -242,7 +244,7 @@ deploy:win64:
     DEPLOY_FILENAME: $PROJECT_NAME-win64.zip
     DEPLOY_TARGET: ci-win64
 
-deploy:html5:
+deploy:itch:html5:
   extends: .butler-deploy
   environment:
     name: itch-html5
@@ -252,7 +254,7 @@ deploy:html5:
     DEPLOY_FILENAME: $PROJECT_NAME-html5.zip
     DEPLOY_TARGET: ci-html5
 
-deploy:wasm:
+deploy:itch:wasm:
   extends: .butler-deploy
   environment:
     name: itch-wasm
@@ -262,7 +264,7 @@ deploy:wasm:
     DEPLOY_FILENAME: $PROJECT_NAME-wasm.zip
     DEPLOY_TARGET: ci-wasm
 
-deploy:macos:
+deploy:itch:macos:
   extends: .butler-deploy
   environment:
     name: itch-macos
@@ -272,7 +274,7 @@ deploy:macos:
     DEPLOY_FILENAME: $PROJECT_NAME-macos.zip
     DEPLOY_TARGET: ci-macos
 
-deploy:android-armv7:
+deploy:itch:android-armv7:
   extends: .butler-deploy
   environment:
     name: itch-android-armv7
@@ -282,7 +284,7 @@ deploy:android-armv7:
     DEPLOY_FILENAME: $PROJECT_NAME-android-armv7.apk
     DEPLOY_TARGET: ci-android-armv7
 
-deploy:android-arm64:
+deploy:itch:android-arm64:
   extends: .butler-deploy
   environment:
     name: itch-android-arm64
@@ -292,7 +294,7 @@ deploy:android-arm64:
     DEPLOY_FILENAME: $PROJECT_NAME-android-arm64.apk
     DEPLOY_TARGET: ci-android-arm64
 
-deploy:steamlink:
+deploy:itch:steamlink:
   extends: .butler-deploy
   environment:
     name: itch-steamlink
@@ -302,7 +304,7 @@ deploy:steamlink:
     DEPLOY_FILENAME: $PROJECT_NAME-steamlink.zip
     DEPLOY_TARGET: ci-steamlink
 
-deploy:pocketchip:
+deploy:itch:pocketchip:
   extends: .butler-deploy
   environment:
     name: itch-pocketchip
@@ -312,7 +314,7 @@ deploy:pocketchip:
     DEPLOY_FILENAME: $PROJECT_NAME-pocketchip.zip
     DEPLOY_TARGET: ci-pocketchip
 
-deploy:raspberrypi:
+deploy:itch:raspberrypi:
   extends: .butler-deploy
   environment:
     name: itch-raspberrypi
@@ -322,7 +324,7 @@ deploy:raspberrypi:
     DEPLOY_FILENAME: $PROJECT_NAME-raspberrypi.zip
     DEPLOY_TARGET: ci-raspberrypi
 
-deploy:switch:
+deploy:itch:switch:
   extends: .butler-deploy
   environment:
     name: itch-switch
@@ -332,7 +334,7 @@ deploy:switch:
     DEPLOY_FILENAME: $PROJECT_NAME-switch.zip
     DEPLOY_TARGET: ci-switch
 
-deploy:maemo5:
+deploy:itch:maemo5:
   extends: .butler-deploy
   environment:
     name: itch-maemo5
@@ -341,6 +343,22 @@ deploy:maemo5:
   variables:
     DEPLOY_FILENAME: $PROJECT_NAME-maemo5.tar.gz
     DEPLOY_TARGET: ci-maemo5
+
+deploy:playstore:
+  stage: deploy
+  image: dosowisko/fastlane
+  when: on_success
+  retry: 2
+  only:
+    refs:
+      - master
+    variables:
+      - $PLAY_STORE_DEPLOY
+  environment:
+    name: playstore-$CI_JOB_NAME
+  script:
+    - cd utils
+    - fastlane supply run -p `build-scripts/read_cmake_var.sh LIBSUPERDERPY_APPID` -a production --skip_upload_aab true --skip_upload_metadata true --skip_upload_images true --skip_upload_screenshots true -c "$PLAY_STORE_KEY" -u utils/output/$PROJECT_NAME-android-arm64.apk,utils/output/$PROJECT_NAME-android-armv7.apk 2>&1 | tee /dev/stderr | grep apkUpgradeVersionConflict
 
 .xmpp-notify:
   image: dosowisko/xmpp-muc-send
