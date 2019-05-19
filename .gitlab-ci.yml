@@ -361,7 +361,7 @@ deploy:playstore:
     name: playstore-$CI_JOB_NAME
   script:
     - cd utils
-    - fastlane supply run -p `build-scripts/read_cmake_var.sh LIBSUPERDERPY_APPID` -a production --skip_upload_aab true --skip_upload_metadata true --skip_upload_images true --skip_upload_screenshots true -c "$PLAY_STORE_KEY" -u output/$PROJECT_NAME-android-arm64.apk,output/$PROJECT_NAME-android-armv7.apk 2>&1 | tee /dev/stderr | grep apkUpgradeVersionConflict
+    - fastlane supply run -p `build-scripts/read_cmake_var.sh LIBSUPERDERPY_APPID` -a production --skip_upload_aab true --skip_upload_metadata true --skip_upload_images true --skip_upload_screenshots true -c "$PLAY_STORE_KEY" -u output/$PROJECT_NAME-android-arm64.apk,output/$PROJECT_NAME-android-armv7.apk
 
 .fdroid-deploy:
   stage: deploy
@@ -372,14 +372,14 @@ deploy:playstore:
     refs:
       - master
     variables:
-      - $FDROID_UPLOAD_URL
+      - $FDROID_DEPLOY
   environment:
     name: fdroid-$CI_JOB_NAME
     url: $FDROID_URL
   variables:
     GIT_STRATEGY: none
   script:
-    - curl -F "secret=$FDROID_SECRET" -F "file=@$DEPLOY_TARGET" -F "suite=$FDROID_SUITE" $FDROID_UPLOAD_URL
+    - curl -F "secret=$FDROID_SECRET" -F "file=@$DEPLOY_FILENAME" -F "suite=$FDROID_SUITE" $FDROID_UPLOAD_URL
 
 deploy:fdroid:android-armv7:
   extends: .fdroid-deploy
