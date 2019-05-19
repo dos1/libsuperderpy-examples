@@ -363,6 +363,42 @@ deploy:playstore:
     - cd utils
     - fastlane supply run -p `build-scripts/read_cmake_var.sh LIBSUPERDERPY_APPID` -a production --skip_upload_aab true --skip_upload_metadata true --skip_upload_images true --skip_upload_screenshots true -c "$PLAY_STORE_KEY" -u output/$PROJECT_NAME-android-arm64.apk,output/$PROJECT_NAME-android-armv7.apk 2>&1 | tee /dev/stderr | grep apkUpgradeVersionConflict
 
+.fdroid-deploy:
+  stage: deploy
+  image: dosowisko/curl
+  when: on_success
+  retry: 2
+  only:
+    refs:
+      - master
+    variables:
+      - $FDROID_UPLOAD_URL
+  environment:
+    name: fdroid-$CI_JOB_NAME
+    url: $FDROID_URL
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - curl -F "secret=$FDROID_SECRET" -F "file=@$DEPLOY_TARGET" -F "suite=$FDROID_SUITE" $FDROID_UPLOAD_URL
+
+deploy:fdroid:android-armv7:
+  extends: .fdroid-deploy
+  environment:
+    name: fdroid-android-armv7
+  dependencies:
+    - build:android-armv7
+  variables:
+    DEPLOY_FILENAME: $PROJECT_NAME-android-armv7.apk
+
+deploy:fdroid:android-arm64:
+  extends: .fdroid-deploy
+  environment:
+    name: fdroid-android-arm64
+  dependencies:
+    - build:android-arm64
+  variables:
+    DEPLOY_FILENAME: $PROJECT_NAME-android-arm64.apk
+
 .xmpp-notify:
   image: dosowisko/xmpp-muc-send
   stage: notify
