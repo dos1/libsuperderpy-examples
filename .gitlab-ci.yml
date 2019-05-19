@@ -379,7 +379,7 @@ deploy:playstore:
   variables:
     GIT_STRATEGY: none
   script:
-    - curl -F "secret=$FDROID_SECRET" -F "file=@utils/output/$DEPLOY_FILENAME" -F "suite=$FDROID_SUITE" $FDROID_UPLOAD_URL
+    - curl -f -F "secret=$FDROID_SECRET" -F "file=@utils/output/$DEPLOY_FILENAME" -F "suite=$FDROID_SUITE" $FDROID_UPLOAD_URL
 
 deploy:fdroid:android-armv7:
   extends: .fdroid-deploy
