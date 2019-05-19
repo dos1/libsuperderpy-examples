@@ -354,11 +354,14 @@ deploy:playstore:
       - master
     variables:
       - $PLAY_STORE_DEPLOY
+  dependencies:
+    - build:android-armv7
+    - build:android-arm64
   environment:
     name: playstore-$CI_JOB_NAME
   script:
     - cd utils
-    - fastlane supply run -p `build-scripts/read_cmake_var.sh LIBSUPERDERPY_APPID` -a production --skip_upload_aab true --skip_upload_metadata true --skip_upload_images true --skip_upload_screenshots true -c "$PLAY_STORE_KEY" -u utils/output/$PROJECT_NAME-android-arm64.apk,utils/output/$PROJECT_NAME-android-armv7.apk 2>&1 | tee /dev/stderr | grep apkUpgradeVersionConflict
+    - fastlane supply run -p `build-scripts/read_cmake_var.sh LIBSUPERDERPY_APPID` -a production --skip_upload_aab true --skip_upload_metadata true --skip_upload_images true --skip_upload_screenshots true -c "$PLAY_STORE_KEY" -u output/$PROJECT_NAME-android-arm64.apk,output/$PROJECT_NAME-android-armv7.apk 2>&1 | tee /dev/stderr | grep apkUpgradeVersionConflict
 
 .xmpp-notify:
   image: dosowisko/xmpp-muc-send
