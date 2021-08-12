@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 		(struct Params){
 			320,
 			180,
-			.handlers = (struct Handlers){
+			.handlers = {
 				.event = GlobalEventHandler,
 				.destroy = DestroyGameData,
 			},
