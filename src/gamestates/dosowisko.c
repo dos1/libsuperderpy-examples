@@ -95,41 +95,43 @@ void Gamestate_Logic(struct Game* game, struct GamestateResources* data, double 
 	data->underscore = Fract(game->time) >= 0.5;
 }
 
+void Gamestate_Tick(struct Game* game, struct GamestateResources* data) {}
+
+void Gamestate_PreDraw(struct Game* game, struct GamestateResources* data) {
+	char t[255] = "";
+	strncpy(t, data->text, 255);
+	if (data->underscore) {
+		strncat(t, "_", 2);
+	} else {
+		strncat(t, " ", 2);
+	}
+
+	al_set_target_bitmap(data->bitmap);
+	al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+
+	al_draw_text(data->font, al_map_rgba(255, 255, 255, 10), 320 / 2.0,
+		180 * 0.4167, ALLEGRO_ALIGN_CENTRE, t);
+
+	double tg = tan(-data->tan / 384.0 * ALLEGRO_PI - ALLEGRO_PI / 2);
+
+	int fade = data->fadeout ? 255 : (int)(data->fade);
+
+	al_set_target_bitmap(data->pixelator);
+	al_clear_to_color(al_map_rgb(35, 31, 32));
+
+	al_draw_tinted_scaled_bitmap(data->bitmap, al_map_rgba(fade, fade, fade, fade), 0, 0,
+		al_get_bitmap_width(data->bitmap), al_get_bitmap_height(data->bitmap),
+		-tg * al_get_bitmap_width(data->bitmap) * 0.05,
+		-tg * al_get_bitmap_height(data->bitmap) * 0.05,
+		al_get_bitmap_width(data->bitmap) + tg * 0.1 * al_get_bitmap_width(data->bitmap),
+		al_get_bitmap_height(data->bitmap) + tg * 0.1 * al_get_bitmap_height(data->bitmap),
+		0);
+
+	al_draw_bitmap(data->checkerboard, 0, 0, 0);
+}
+
 void Gamestate_Draw(struct Game* game, struct GamestateResources* data) {
 	if (!data->fadeout) {
-		char t[255] = "";
-		strncpy(t, data->text, 255);
-		if (data->underscore) {
-			strncat(t, "_", 2);
-		} else {
-			strncat(t, " ", 2);
-		}
-
-		al_set_target_bitmap(data->bitmap);
-		al_clear_to_color(al_map_rgba(0, 0, 0, 0));
-
-		al_draw_text(data->font, al_map_rgba(255, 255, 255, 10), 320 / 2.0,
-			180 * 0.4167, ALLEGRO_ALIGN_CENTRE, t);
-
-		double tg = tan(-data->tan / 384.0 * ALLEGRO_PI - ALLEGRO_PI / 2);
-
-		int fade = data->fadeout ? 255 : (int)(data->fade);
-
-		al_set_target_bitmap(data->pixelator);
-		al_clear_to_color(al_map_rgb(35, 31, 32));
-
-		al_draw_tinted_scaled_bitmap(data->bitmap, al_map_rgba(fade, fade, fade, fade), 0, 0,
-			al_get_bitmap_width(data->bitmap), al_get_bitmap_height(data->bitmap),
-			-tg * al_get_bitmap_width(data->bitmap) * 0.05,
-			-tg * al_get_bitmap_height(data->bitmap) * 0.05,
-			al_get_bitmap_width(data->bitmap) + tg * 0.1 * al_get_bitmap_width(data->bitmap),
-			al_get_bitmap_height(data->bitmap) + tg * 0.1 * al_get_bitmap_height(data->bitmap),
-			0);
-
-		al_draw_bitmap(data->checkerboard, 0, 0, 0);
-
-		SetFramebufferAsTarget(game);
-
 		al_draw_scaled_bitmap(data->pixelator, 0, 0, 320, 180, 0, 0, game->viewport.width, game->viewport.height, 0);
 	}
 }
@@ -153,12 +155,12 @@ void Gamestate_Start(struct Game* game, struct GamestateResources* data) {
 	TM_AddDelay(data->timeline, 1.0);
 	TM_AddAction(data->timeline, End, NULL);
 	al_play_sample_instance(data->sound);
+	SetBackgroundColor(game, al_map_rgb(0, 0, 0));
 }
 
 void Gamestate_ProcessEvent(struct Game* game, struct GamestateResources* data, ALLEGRO_EVENT* ev) {
 	if (((ev->type == ALLEGRO_EVENT_KEY_DOWN) && (ev->keyboard.keycode == ALLEGRO_KEY_ESCAPE)) || (ev->type == ALLEGRO_EVENT_TOUCH_END) || (ev->type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP)) {
-		UnloadAllGamestates(game);
-		StartGamestate(game, SKIP_GAMESTATE);
+		SwitchCurrentGamestate(game, SKIP_GAMESTATE);
 	}
 }
 
@@ -203,9 +205,8 @@ void* Gamestate_Load(struct Game* game, void (*progress)(struct Game*)) {
 void Gamestate_PostLoad(struct Game* game, struct GamestateResources* data) {
 	al_set_target_bitmap(data->checkerboard);
 	al_lock_bitmap(data->checkerboard, ALLEGRO_PIXEL_FORMAT_ANY, ALLEGRO_LOCK_WRITEONLY);
-	int x, y;
-	for (x = 0; x < al_get_bitmap_width(data->checkerboard); x = x + 2) {
-		for (y = 0; y < al_get_bitmap_height(data->checkerboard); y = y + 2) {
+	for (int x = 0; x < al_get_bitmap_width(data->checkerboard); x = x + 2) {
+		for (int y = 0; y < al_get_bitmap_height(data->checkerboard); y = y + 2) {
 			al_put_pixel(x, y, al_map_rgba(0, 0, 0, 64));
 			al_put_pixel(x + 1, y, al_map_rgba(0, 0, 0, 0));
 			al_put_pixel(x, y + 1, al_map_rgba(0, 0, 0, 0));
@@ -244,3 +245,6 @@ void Gamestate_Reload(struct Game* game, struct GamestateResources* data) {
 	data->pixelator = CreateNotPreservedBitmap(320, 180);
 	al_set_new_bitmap_flags(flags);
 }
+
+void Gamestate_Pause(struct Game* game, struct GamestateResources* data) {}
+void Gamestate_Resume(struct Game* game, struct GamestateResources* data) {}

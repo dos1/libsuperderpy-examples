@@ -23,20 +23,22 @@
 
 struct GamestateResources {
 	ALLEGRO_FONT* font;
-	int blink_counter;
+	double blink_counter;
 };
 
 int Gamestate_ProgressCount = 1;
 
 void Gamestate_Logic(struct Game* game, struct GamestateResources* data, double delta) {
-	data->blink_counter++;
-	if (data->blink_counter >= 60) {
+	data->blink_counter += delta;
+	if (data->blink_counter >= 1) {
 		data->blink_counter = 0;
 	}
 }
 
+void Gamestate_Tick(struct Game* game, struct GamestateResources* data) {}
+
 void Gamestate_Draw(struct Game* game, struct GamestateResources* data) {
-	if (data->blink_counter < 50) {
+	if (data->blink_counter < 0.8) {
 		al_draw_text(data->font, al_map_rgb(255, 255, 255), game->viewport.width / 2.0, game->viewport.height / 2.0,
 			ALLEGRO_ALIGN_CENTRE, "Nothing to see here, move along!");
 	}

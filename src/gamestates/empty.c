@@ -34,6 +34,17 @@ void Gamestate_Logic(struct Game* game, struct GamestateResources* data, double 
 	// Here you should do all your game logic as if <delta> seconds have passed.
 }
 
+void Gamestate_Tick(struct Game* game, struct GamestateResources* data) {
+	// Optional.
+	// Similar to Logic, but called at fixed rate (by default 60 times per second).
+}
+
+void Gamestate_PreDraw(struct Game* game, struct GamestateResources* data) {
+	// Optional.
+	// Called before Gamestate_Draw, before the target bitmap has been set up.
+	// Use to draw to custom textures.
+}
+
 void Gamestate_Draw(struct Game* game, struct GamestateResources* data) {
 	// Draw everything to the screen here.
 }
